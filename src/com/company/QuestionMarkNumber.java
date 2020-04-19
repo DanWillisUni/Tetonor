@@ -1,8 +1,10 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class QuestionMarkNumber {
-    private int min;
-    private int max;
+    private int min;//inclusive
+    private int max;//inclusive
     QuestionMarkNumber(int min,int max){
         this.min = min;
         this.max = max;
@@ -18,5 +20,12 @@ public class QuestionMarkNumber {
     }
     public String toString(){
         return min + "-" + max;
+    }
+    public ArrayList<Integer> getAll(){
+        ArrayList<Integer> r = new ArrayList<>();
+        for (int i = min; i <= max;i++){
+            r.add(i);
+        }
+        return r;
     }
 }

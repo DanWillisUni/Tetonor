@@ -32,6 +32,9 @@ public class Grid {
             }
         }
     }
+    Grid(){
+        //make a random grid
+    }
     public int getBoxN(int i){
         return boxesToGetTo.get(i);
     }
@@ -64,6 +67,49 @@ public class Grid {
                 System.out.print(getQMB(i).toString() + ", ");
             }
         }
+    }
+    private boolean testIfPair(int a,int b){
+        boolean m = false;
+        boolean ad = false;
+        for (int i:boxesToGetTo){
+            if (a * b == i){
+                if (ad){
+                    return true;
+                }
+                m = true;
+            }
+            if (a + b == i){
+                if(m){
+                    return true;
+                }
+                ad = true;
+            }
+        }
+        return false;
+    }
+    public ArrayList<Pairs> wordOutAllPairs(){
+        ArrayList<Pairs> pp = new ArrayList<>();
+        int xPrev = 0;
+        for (int x = 0; x<pairNumbers.size();x++){
+            if (pairNumbers.get(x) != xPrev){
+                int yPrev = 0;
+                for(int y = x + 1; y< pairNumbers.size();y++){
+                    if (yPrev != pairNumbers.get(y)){
+                        if (testIfPair(pairNumbers.get(x),pairNumbers.get(y))){
+                            Pairs nP = new Pairs(pairNumbers.get(x),pairNumbers.get(y));
+                            pp.add(nP);
+                        }
+                    }
+                    yPrev = pairNumbers.get(y);
+                }
+            }
+            xPrev = pairNumbers.get(x);
+        }
+        //check question mark numbers against others
 
+
+
+
+        return pp;
     }
 }
