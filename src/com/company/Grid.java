@@ -1,7 +1,6 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Grid {
     private List<Integer> boxesToGetTo;
@@ -32,8 +31,24 @@ public class Grid {
             }
         }
     }
-    Grid(){
-        //make a random grid
+    public static Grid Generate(int highestGridNumber,int numberOFPairs,int numberOfBlanks){
+        Random rand = new Random(); //instance of random class
+        int upperbound = (int) Math.round(Math.sqrt(highestGridNumber));
+        ArrayList pN = new ArrayList<>();
+        ArrayList bN = new ArrayList<>();
+        for (int i = 0;i<numberOFPairs;i++){
+            int a = rand.nextInt(upperbound) + 1;
+            int b = rand.nextInt(upperbound) + 1;
+            pN.add(a);
+            pN.add(b);
+            bN.add(a+b);
+            bN.add(a*b);
+        }
+        Collections.sort(pN);
+        for (int i = 0;i<numberOfBlanks;i++){
+            pN.set(rand.nextInt(pN.size()),-1);
+        }
+        return new Grid(bN,pN);
     }
     public int getBoxN(int i){
         return boxesToGetTo.get(i);
@@ -87,7 +102,7 @@ public class Grid {
         }
         return false;
     }
-    public ArrayList<Pairs> wordOutAllPairs(){
+    public ArrayList<Pairs> solve(){
         ArrayList<Pairs> pp = new ArrayList<>();
         int xPrev = 0;
         for (int x = 0; x<pairNumbers.size();x++){
@@ -164,8 +179,19 @@ public class Grid {
             }
         }
         missingBoxN.removeAll(foundBoxNumber);
-        for (QuestionMarkNumber qmn:qmb){
-
+        //got all the one half mystery ones
+        for (int qmn = 0;qmn<qmb.size();qmn++){
+            for(int i:qmb.get(qmn).getAll()){
+                for (int qmnj = qmn+1;qmnj<qmb.size();qmnj++){
+                    for(int j:qmb.get(qmnj).getAll()){
+                        if(missingBoxN.contains(i+j)){
+                            if(missingBoxN.contains(i*j)){
+                                r.add(new Pairs(0-i,0-j));
+                            }
+                        }
+                    }
+                }
+            }
         }
         return r;
     }
