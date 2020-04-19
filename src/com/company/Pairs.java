@@ -30,4 +30,6 @@ public class Pairs {
     public int getMultiplicationNumber() {
         return multiplicationNumber;
     }
+    public int getA(){return a;}
+    public int getB(){return b;}
 }

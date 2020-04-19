@@ -106,10 +106,67 @@ public class Grid {
             xPrev = pairNumbers.get(x);
         }
         //check question mark numbers against others
-
-
-
-
+        ArrayList<Integer> doneAlready = new ArrayList<>();
+        ArrayList<Integer> BoxDoneAlready = new ArrayList<>();
+        for (Pairs p: pp){
+            BoxDoneAlready.add(p.getA());
+            BoxDoneAlready.add(p.getB());
+            doneAlready.add(p.getAdditionNumber());
+            doneAlready.add(p.getMultiplicationNumber());
+        }
+        ArrayList<Integer> missedNumbers = new ArrayList<>();
+        for (int i: boxesToGetTo){
+            Boolean found = false;
+            for (int j:doneAlready){
+                if (i==j){
+                    found = true;
+                }
+            }
+            if (!found){
+                missedNumbers.add(i);
+            }
+        }
+        ArrayList<Integer> missingBox = new ArrayList<>();
+        for (int x:pairNumbers){
+            boolean found = false;
+            for(int y:BoxDoneAlready){
+                if(x==y){
+                    found = true;
+                }
+            }
+            if (!found){
+                missingBox.add(x);
+            }
+        }
+        ArrayList<Pairs> endPairs = getMysteryOnes(missingBox,missedNumbers);
+        pp.addAll(endPairs);
         return pp;
+    }
+    public ArrayList<Pairs> getMysteryOnes(ArrayList<Integer> missingPairN,ArrayList<Integer> missingBoxN){
+        ArrayList<Pairs> r = new ArrayList<>();
+        ArrayList<QuestionMarkNumber> qmb = questionMarkBoxes;
+
+        ArrayList<Integer> foundBoxNumber = new ArrayList<>();
+        for(int mbn = 0;mbn<missingBoxN.size();mbn++){
+            for(int mpn:missingPairN){
+                int other = missingBoxN.get(mbn)/mpn;
+                if (missingBoxN.contains(mpn+other)){
+                    for(QuestionMarkNumber qm:qmb){
+                        if(qm.testValue(other)){
+                            r.add(new Pairs(mpn,0-other));
+                            qmb.remove(qm);
+                            foundBoxNumber.add(other+mpn);
+                            foundBoxNumber.add(other*mpn);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        missingBoxN.removeAll(foundBoxNumber);
+        for (QuestionMarkNumber qmn:qmb){
+
+        }
+        return r;
     }
 }
